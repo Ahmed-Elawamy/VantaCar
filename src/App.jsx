@@ -16,6 +16,7 @@ import Navigation from './components/layout/Navigation'
 import ProgressIndicator from './components/layout/ProgressIndicator'
 import Footer from './components/layout/Footer'
 import LoadingScreen from './components/ui/LoadingScreen'
+import AudioController from './components/audio/AudioController'
 
 import SceneArrival from './sections/SceneArrival'
 import SceneDesign from './sections/SceneDesign'
@@ -28,6 +29,7 @@ function AppContent() {
   const [stats, setStats] = useState(null)
   const [activeScene, setActiveScene] = useState(0)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [isSoundOn, setIsSoundOn] = useState(false)
 
   const controlsRef = useRef()
   const vehicleRef = useRef()
@@ -72,7 +74,6 @@ function AppContent() {
         const heading = section.querySelector('h1, h2')
         const subTexts = section.querySelectorAll('p')
         const buttons = section.querySelectorAll('button')
-        const labels = section.querySelectorAll('span')
         const momentItems = section.querySelectorAll('h3')
 
         if (heading) {
@@ -89,7 +90,7 @@ function AppContent() {
           })
         })
 
-        momentItems.forEach((h3, idx) => {
+        momentItems.forEach((h3) => {
           gsap.fromTo(h3, { opacity: 0, x: -20 }, {
             opacity: 1, x: 0, duration: 0.6, ease: 'power2.out',
             scrollTrigger: { trigger: section, start: 'top 60%', end: 'top 25%', scrub: 1 },
@@ -173,7 +174,12 @@ function AppContent() {
       </div>
 
       {/* Navigation */}
-      <Navigation activeScene={activeScene} onNavClick={handleNavClick} />
+      <Navigation 
+        activeScene={activeScene} 
+        onNavClick={handleNavClick}
+        isSoundOn={isSoundOn}
+        setIsSoundOn={setIsSoundOn}
+      />
 
       {/* Progress indicator */}
       <ProgressIndicator activeScene={activeScene} scrollProgress={scrollProgress} />
@@ -195,6 +201,9 @@ function AppContent() {
           <LoadingScreen />
         </div>
       )}
+
+      {/* Audio System */}
+      <AudioController scrollProgress={scrollProgress} isSoundOn={isSoundOn} />
     </div>
   )
 }

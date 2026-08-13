@@ -17,22 +17,22 @@ import * as THREE from 'three'
  * 0.85 - 1.00  REVEAL final  — wide 3/4 cinematic
  */
 const KEYFRAMES = [
-  // 00 — ARRIVAL: 3/4 front wide shot
-  { p: 0.00, pos: [5.5, 2.8, 6.5], look: [0, 1.0, 0], rotY: 0.55 },
-  // 01 — DESIGN: closer, front fascia focus
-  { p: 0.14, pos: [2.5, 1.4, 4.2], look: [0, 0.7, 0], rotY: 0.30 },
-  // 02 — PERFORMANCE: dynamic rear-3/4, pulled back
-  { p: 0.28, pos: [6.5, 1.8, -5.0], look: [0, 0.9, 0], rotY: -0.45 },
-  // 03 — DRIVER'S SPACE: interior-focused, closer, slightly elevated
-  { p: 0.42, pos: [1.0, 1.6, 2.8], look: [-0.3, 1.1, 0], rotY: 0.10 },
-  // 04 — DETAILS: close-up, low angle
-  { p: 0.57, pos: [1.5, 0.6, 2.0], look: [0.4, 0.5, 0], rotY: 0.20 },
-  // 05 — REVEAL intro: pulling back
-  { p: 0.71, pos: [4.0, 2.2, 5.0], look: [0, 0.9, 0], rotY: 0.40 },
-  // 06 — REVEAL final: wide cinematic 3/4
-  { p: 0.85, pos: [6.0, 3.0, 7.0], look: [0, 1.0, 0], rotY: 0.45 },
+  // 00 — ARRIVAL: Front 3/4 hero angle
+  { p: 0.00, pos: [5.5, 2.5, 6.5], look: [0, 1.0, 0], rotY: 0.0 },
+  // 01 — DESIGN: Front/side profile, tracking body lines
+  { p: 0.14, pos: [6.5, 1.4, 2.0], look: [0, 0.8, 0], rotY: 0.05 },
+  // 02 — PERFORMANCE: Aggressive side/rear angle
+  { p: 0.28, pos: [5.5, 1.8, -5.0], look: [0, 1.0, 0], rotY: 0.10 },
+  // 03 — DRIVER'S SPACE: Cabin/interior focus (NO reverse rotation)
+  { p: 0.42, pos: [1.2, 1.6, -1.5], look: [-0.2, 1.1, 0.5], rotY: 0.10 },
+  // 04 — DETAILS: Close-up macro (e.g., side/rear quarter)
+  { p: 0.57, pos: [-2.5, 1.0, -3.0], look: [-1.0, 0.8, -1.0], rotY: 0.05 },
+  // 05 — REVEAL intro: Sweeping pull-back
+  { p: 0.71, pos: [-5.0, 2.2, 1.0], look: [0, 0.9, 0], rotY: 0.02 },
+  // 06 — REVEAL final: Opposite 3/4 hero angle
+  { p: 0.85, pos: [-6.5, 2.8, 5.5], look: [0, 1.0, 0], rotY: 0.0 },
   // End
-  { p: 1.00, pos: [6.0, 3.0, 7.0], look: [0, 1.0, 0], rotY: 0.45 },
+  { p: 1.00, pos: [-6.5, 2.8, 5.5], look: [0, 1.0, 0], rotY: 0.0 },
 ]
 
 export default function CameraRig({ scrollProgressRef, vehicleRef, controlsRef }) {
@@ -83,12 +83,19 @@ export default function CameraRig({ scrollProgressRef, vehicleRef, controlsRef }
     // Smoothstep for more natural easing between keyframes
     const t = localT * localT * (3 - 2 * localT)
 
-    k0Pos.set(...kf0.pos)
-    k1Pos.set(...kf1.pos)
+    let scaleFactor = 1
+    if (vehicleRef.current?.modelSize) {
+      // Adapt camera coordinates dynamically to the actual GLB dimensions
+      const maxD = Math.max(vehicleRef.current.modelSize.x, vehicleRef.current.modelSize.z)
+      scaleFactor = maxD > 0 ? (maxD / 4) : 1
+    }
+
+    k0Pos.set(...kf0.pos).multiplyScalar(scaleFactor)
+    k1Pos.set(...kf1.pos).multiplyScalar(scaleFactor)
     targetPos.copy(k0Pos).lerp(k1Pos, t)
 
-    k0Look.set(...kf0.look)
-    k1Look.set(...kf1.look)
+    k0Look.set(...kf0.look).multiplyScalar(scaleFactor)
+    k1Look.set(...kf1.look).multiplyScalar(scaleFactor)
     targetLook.copy(k0Look).lerp(k1Look, t)
 
     const targetRotY = THREE.MathUtils.lerp(kf0.rotY, kf1.rotY, t)

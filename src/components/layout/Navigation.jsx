@@ -1,6 +1,6 @@
 import { useLang } from '../../lib/LangContext'
 
-export default function Navigation({ activeScene, onNavClick }) {
+export default function Navigation({ activeScene, onNavClick, isSoundOn, setIsSoundOn }) {
   const { t, lang, toggle } = useLang()
 
   const navItems = [
@@ -45,6 +45,17 @@ export default function Navigation({ activeScene, onNavClick }) {
         </div>
 
         <div className="relative z-10 flex items-center gap-4">
+          <div className="flex items-center gap-1.5 border border-graphite-700 px-2.5 py-1.5">
+            <button
+              onClick={() => setIsSoundOn((p) => !p)}
+              className={`text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors duration-200 ${
+                isSoundOn ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'
+              }`}
+            >
+              {lang === 'ar' ? (isSoundOn ? 'صوت مفعل' : 'صوت معطل') : (isSoundOn ? 'SOUND ON' : 'SOUND OFF')}
+            </button>
+          </div>
+
           <div className="flex items-center gap-1.5 border border-graphite-700 px-2.5 py-1.5">
             <button
               onClick={() => lang !== 'en' && toggle()}
