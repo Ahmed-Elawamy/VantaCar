@@ -30,15 +30,22 @@ function AppContent() {
   const [activeScene, setActiveScene] = useState(0)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isSoundOn, setIsSoundOn] = useState(true)
+  const [audioEnabled, setAudioEnabled] = useState(false)
 
   const controlsRef = useRef()
   const vehicleRef = useRef()
+  const audioControllerRef = useRef()
+  const activeSceneRef = useRef(0)
   const scrollProgressRef = useRef(0)
   const containerRef = useRef(null)
 
   const handleLoaded = useCallback((s) => {
     setStats(s)
   }, [])
+
+  useEffect(() => {
+    activeSceneRef.current = activeScene
+  }, [activeScene])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -125,6 +132,12 @@ function AppContent() {
     }
   }, [])
 
+  const handleEnableSound = useCallback(() => {
+    const activation = audioControllerRef.current?.activate(activeSceneRef.current)
+    if (!activation) return
+    activation.then(() => setAudioEnabled(true)).catch(() => {})
+  }, [])
+
   return (
     <div ref={containerRef} className="relative w-full bg-graphite-950">
       {/* Fixed 3D Canvas */}
@@ -177,6 +190,7 @@ function AppContent() {
       <Navigation 
         activeScene={activeScene} 
         onNavClick={handleNavClick}
+        audioEnabled={audioEnabled}
         isSoundOn={isSoundOn}
         setIsSoundOn={setIsSoundOn}
       />
@@ -186,7 +200,11 @@ function AppContent() {
 
       {/* Scrollable content sections */}
       <div className="relative z-20">
-        <SceneArrival />
+        <SceneArrival
+          audioEnabled={audioEnabled}
+          onEnableSound={handleEnableSound}
+          onExplore={() => handleNavClick(1)}
+        />
         <SceneDesign />
         <ScenePerformance />
         <SceneDriverSpace />
@@ -204,7 +222,7 @@ function AppContent() {
 
       {/* Audio System — only attached after experience is fully ready */}
       <AudioController
-        isReady={!!stats}
+        ref={audioControllerRef}
         scrollProgress={scrollProgress}
         activeScene={activeScene}
         isSoundOn={isSoundOn}

@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useLang } from '../../lib/LangContext'
 
-export default function Navigation({ activeScene, onNavClick, isSoundOn, setIsSoundOn }) {
+export default function Navigation({ activeScene, onNavClick, audioEnabled, isSoundOn, setIsSoundOn }) {
   const { t, lang, toggle } = useLang()
 
   const navItems = [
@@ -9,6 +10,10 @@ export default function Navigation({ activeScene, onNavClick, isSoundOn, setIsSo
     { label: t.nav.performance, scene: 2 },
     { label: t.nav.details, scene: 4 },
   ]
+
+  const soundLabel = !audioEnabled
+    ? (lang === 'ar' ? 'الصوت —' : 'SOUND —')
+    : (lang === 'ar' ? (isSoundOn ? 'الصوت يعمل' : 'الصوت متوقف') : (isSoundOn ? 'SOUND ON' : 'SOUND OFF'))
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
@@ -34,11 +39,7 @@ export default function Navigation({ activeScene, onNavClick, isSoundOn, setIsSo
                 }`}
               >
                 {item.label}
-                <span
-                  className={`absolute -bottom-1.5 left-0 h-px bg-accent transition-all duration-300 ${
-                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`}
-                />
+                <span className={`absolute -bottom-1.5 left-0 h-px bg-accent transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`} />
               </button>
             )
           })}
@@ -47,33 +48,25 @@ export default function Navigation({ activeScene, onNavClick, isSoundOn, setIsSo
         <div className="relative z-10 flex items-center gap-4">
           <div className="flex items-center gap-1.5 border border-graphite-700 px-2.5 py-1.5">
             <button
-              onClick={() => setIsSoundOn((p) => !p)}
+              onClick={() => audioEnabled && setIsSoundOn((p) => !p)}
               className={`text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors duration-200 ${
                 isSoundOn ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'
               }`}
             >
-              {lang === 'ar' ? (isSoundOn ? 'صوت مفعل' : 'صوت معطل') : (isSoundOn ? 'SOUND ON' : 'SOUND OFF')}
+              {soundLabel}
             </button>
           </div>
 
           <div className="flex items-center gap-1.5 border border-graphite-700 px-2.5 py-1.5">
             <button
               onClick={() => lang !== 'en' && toggle()}
-              className={`text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors duration-200 ${
-                lang === 'en' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'
-              }`}
-            >
-              EN
-            </button>
+              className={`text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors duration-200 ${lang === 'en' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+            >EN</button>
             <span className="text-graphite-600">/</span>
             <button
               onClick={() => lang !== 'ar' && toggle()}
-              className={`text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors duration-200 ${
-                lang === 'ar' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'
-              }`}
-            >
-              AR
-            </button>
+              className={`text-[10px] font-semibold uppercase tracking-[0.15em] transition-colors duration-200 ${lang === 'ar' ? 'text-white' : 'text-neutral-500 hover:text-neutral-300'}`}
+            >AR</button>
           </div>
         </div>
       </div>

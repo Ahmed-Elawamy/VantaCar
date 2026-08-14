@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import { useLang } from '../lib/LangContext'
 
-export default function SceneArrival() {
+export default function SceneArrival({ audioEnabled, onEnableSound, onExplore }) {
   const { t } = useLang()
   const c = t.chapters.arrival
 
@@ -29,8 +30,11 @@ export default function SceneArrival() {
           </p>
 
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:gap-8">
-            <button className="group relative overflow-hidden border border-white/20 bg-white/5 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:border-white/40 hover:bg-white/10">
-              <span className="relative z-10">{c.cta}</span>
+            <button
+              onClick={audioEnabled ? onExplore : onEnableSound}
+              className="group relative overflow-hidden border border-white/20 bg-white/5 px-8 py-3.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:border-white/40 hover:bg-white/10"
+            >
+              <span className="relative z-10">{audioEnabled ? c.cta : c.enableSound}</span>
               <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             </button>
 
