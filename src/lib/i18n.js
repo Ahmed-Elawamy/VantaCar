@@ -13,6 +13,7 @@ export const translations = {
         headline2: 'OF MOTION',
         sub: 'A performance machine shaped by precision, designed to move.',
         cta: 'EXPLORE THE VEHICLE',
+        enableSound: 'ENABLE SOUND',
         scroll: 'SCROLL TO BEGIN',
       },
       design: {
@@ -103,6 +104,7 @@ export const translations = {
         headline2: 'للحركة',
         sub: 'آلة أداء صُنعت بدقة، صُممت لتتحرك.',
         cta: 'استكشف المركبة',
+        enableSound: 'تفعيل الصوت',
         scroll: 'اسحب للبدء',
       },
       design: {

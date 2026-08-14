@@ -29,7 +29,7 @@ function AppContent() {
   const [stats, setStats] = useState(null)
   const [activeScene, setActiveScene] = useState(0)
   const [scrollProgress, setScrollProgress] = useState(0)
-  const [isSoundOn, setIsSoundOn] = useState(false)
+  const [isSoundOn, setIsSoundOn] = useState(true)
 
   const controlsRef = useRef()
   const vehicleRef = useRef()
@@ -202,8 +202,13 @@ function AppContent() {
         </div>
       )}
 
-      {/* Audio System */}
-      <AudioController scrollProgress={scrollProgress} isSoundOn={isSoundOn} />
+      {/* Audio System — only attached after experience is fully ready */}
+      <AudioController
+        isReady={!!stats}
+        scrollProgress={scrollProgress}
+        activeScene={activeScene}
+        isSoundOn={isSoundOn}
+      />
     </div>
   )
 }
