@@ -154,10 +154,10 @@ const AudioController = forwardRef(function AudioController(
 
   return (
     <>
-      <audio ref={startRef} src={AUDIO_FILES.start} preload="auto" />
-      <audio ref={windRef} src={AUDIO_FILES.wind} preload="auto" loop />
-      <audio ref={accelerationRef} src={AUDIO_FILES.acceleration} preload="auto" loop />
-      <audio ref={revRef} src={AUDIO_FILES.rev} preload="auto" />
+      <audio ref={startRef} src={AUDIO_FILES.start} preload="metadata" />
+      <audio ref={windRef} src={AUDIO_FILES.wind} preload="none" loop />
+      <audio ref={accelerationRef} src={AUDIO_FILES.acceleration} preload="none" loop />
+      <audio ref={revRef} src={AUDIO_FILES.rev} preload="none" />
     </>
   )
 })

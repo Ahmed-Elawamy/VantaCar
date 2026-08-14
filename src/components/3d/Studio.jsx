@@ -28,13 +28,13 @@ const ENV_KEYFRAMES = [
 function findPair(progress) {
   for (let i = 0; i < ENV_KEYFRAMES.length - 1; i++) {
     if (progress >= ENV_KEYFRAMES[i].p && progress <= ENV_KEYFRAMES[i + 1].p) {
-      return [ENV_KEYFRAMES[i], ENV_KEYFRAMES[i + 1]]
+      return i
     }
   }
-  return [ENV_KEYFRAMES[ENV_KEYFRAMES.length - 2], ENV_KEYFRAMES[ENV_KEYFRAMES.length - 1]]
+  return ENV_KEYFRAMES.length - 2
 }
 
-export default function Studio({ scrollProgressRef }) {
+export default function Studio({ scrollProgressRef, renderQuality }) {
   const keyLightRef = useRef()
   const fillLightRef = useRef()
   const rimLightRef = useRef()
@@ -48,7 +48,9 @@ export default function Studio({ scrollProgressRef }) {
     const progress = scrollProgressRef.current
     if (progress === undefined || progress === null) return
 
-    const [kf0, kf1] = findPair(progress)
+    const keyframeIndex = findPair(progress)
+    const kf0 = ENV_KEYFRAMES[keyframeIndex]
+    const kf1 = ENV_KEYFRAMES[keyframeIndex + 1]
     const span = kf1.p - kf0.p
     const localT = span > 0 ? (progress - kf0.p) / span : 0
     const t = localT * localT * (3 - 2 * localT)
@@ -82,7 +84,7 @@ export default function Studio({ scrollProgressRef }) {
         intensity={1.8}
         color="#fff0e0"
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={[renderQuality.shadowMapSize, renderQuality.shadowMapSize]}
         shadow-bias={-0.0001}
       >
         <orthographicCamera
@@ -105,15 +107,17 @@ export default function Studio({ scrollProgressRef }) {
         color="#9b7fc8"
       />
 
-      <ContactShadows
-        position={[0, 0.01, 0]}
-        opacity={0.6}
-        scale={16}
-        blur={3}
-        far={10}
-        resolution={1024}
-        color="#000000"
-      />
+      {renderQuality.contactShadows && (
+        <ContactShadows
+          position={[0, 0.01, 0]}
+          opacity={renderQuality.tier === 'medium' ? 0.5 : 0.6}
+          scale={16}
+          blur={3}
+          far={10}
+          resolution={renderQuality.contactResolution}
+          color="#000000"
+        />
+      )}
 
       <Environment preset="studio" background={false} />
     </>

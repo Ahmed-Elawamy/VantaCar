@@ -67,17 +67,19 @@ export default function CameraRig({ scrollProgressRef, vehicleRef, controlsRef }
   function findKeyframePair(progress) {
     for (let i = 0; i < KEYFRAMES.length - 1; i++) {
       if (progress >= KEYFRAMES[i].p && progress <= KEYFRAMES[i + 1].p) {
-        return [KEYFRAMES[i], KEYFRAMES[i + 1]]
+        return i
       }
     }
-    return [KEYFRAMES[KEYFRAMES.length - 2], KEYFRAMES[KEYFRAMES.length - 1]]
+    return KEYFRAMES.length - 2
   }
 
   useFrame((_, delta) => {
     const progress = scrollProgressRef.current
     if (progress === undefined || progress === null) return
 
-    const [kf0, kf1] = findKeyframePair(progress)
+    const keyframeIndex = findKeyframePair(progress)
+    const kf0 = KEYFRAMES[keyframeIndex]
+    const kf1 = KEYFRAMES[keyframeIndex + 1]
     const span = kf1.p - kf0.p
     const localT = span > 0 ? (progress - kf0.p) / span : 0
     // Smoothstep for more natural easing between keyframes

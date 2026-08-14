@@ -17,6 +17,7 @@ import ProgressIndicator from './components/layout/ProgressIndicator'
 import Footer from './components/layout/Footer'
 import LoadingScreen from './components/ui/LoadingScreen'
 import AudioController from './components/audio/AudioController'
+import { getRenderQuality } from './lib/renderQuality'
 
 import SceneArrival from './sections/SceneArrival'
 import SceneDesign from './sections/SceneDesign'
@@ -24,6 +25,8 @@ import ScenePerformance from './sections/ScenePerformance'
 import SceneDriverSpace from './sections/SceneDriverSpace'
 import SceneDetail from './sections/SceneDetail'
 import SceneReveal from './sections/SceneReveal'
+
+const renderQuality = getRenderQuality()
 
 function AppContent() {
   const [stats, setStats] = useState(null)
@@ -37,6 +40,8 @@ function AppContent() {
   const audioControllerRef = useRef()
   const activeSceneRef = useRef(0)
   const scrollProgressRef = useRef(0)
+  const progressUpdateFrame = useRef(null)
+  const lastProgressUpdate = useRef(0)
   const containerRef = useRef(null)
 
   const handleLoaded = useCallback((s) => {
@@ -57,7 +62,14 @@ function AppContent() {
         scrub: 1,
         onUpdate: (self) => {
           scrollProgressRef.current = self.progress
-          setScrollProgress(self.progress)
+          const now = performance.now()
+          if (now - lastProgressUpdate.current < 50) return
+          lastProgressUpdate.current = now
+          if (progressUpdateFrame.current) cancelAnimationFrame(progressUpdateFrame.current)
+          progressUpdateFrame.current = requestAnimationFrame(() => {
+            setScrollProgress(scrollProgressRef.current)
+            progressUpdateFrame.current = null
+          })
         },
       })
 
@@ -113,7 +125,10 @@ function AppContent() {
       })
     }, containerRef)
 
-    return () => ctx.revert()
+    return () => {
+      if (progressUpdateFrame.current) cancelAnimationFrame(progressUpdateFrame.current)
+      ctx.revert()
+    }
   }, [])
 
   useEffect(() => {
@@ -144,7 +159,7 @@ function AppContent() {
       <div className="fixed inset-0 z-0">
         <Canvas
           shadows
-          dpr={[1, 2]}
+          dpr={renderQuality.dpr}
           camera={{ position: [5.5, 2.8, 6.5], fov: 35, near: 0.1, far: 500 }}
           gl={{
             antialias: true,
@@ -157,7 +172,7 @@ function AppContent() {
 
           <Suspense fallback={null}>
             <Vehicle ref={vehicleRef} onLoaded={handleLoaded} />
-            <Studio scrollProgressRef={scrollProgressRef} />
+            <Studio scrollProgressRef={scrollProgressRef} renderQuality={renderQuality} />
             <CameraRig
               scrollProgressRef={scrollProgressRef}
               vehicleRef={vehicleRef}
