@@ -90,10 +90,23 @@ function AppContent() {
 
       // Typography reveal animations per scene
       sections?.forEach((section) => {
+        const sequenceItems = section.querySelectorAll('[data-reveal-item]')
+        if (sequenceItems.length) {
+          gsap.fromTo(sequenceItems, { opacity: 0, y: 24 }, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.22,
+            ease: 'power2.out',
+            scrollTrigger: { trigger: section, start: 'top 72%', end: 'top 28%', scrub: 1 },
+          })
+          return
+        }
+
         const heading = section.querySelector('h1, h2')
         const subTexts = section.querySelectorAll('p')
         const buttons = section.querySelectorAll('button')
-        const momentItems = section.querySelectorAll('h3')
+        const momentItems = section.querySelectorAll('.moment-item')
 
         if (heading) {
           gsap.fromTo(heading, { opacity: 0, y: 40 }, {
@@ -109,12 +122,16 @@ function AppContent() {
           })
         })
 
-        momentItems.forEach((h3) => {
-          gsap.fromTo(h3, { opacity: 0, x: -20 }, {
-            opacity: 1, x: 0, duration: 0.6, ease: 'power2.out',
+        if (momentItems.length) {
+          gsap.fromTo(momentItems, { opacity: 0, x: -20 }, {
+            opacity: 1,
+            x: 0,
+            duration: 0.6,
+            stagger: 0.24,
+            ease: 'power2.out',
             scrollTrigger: { trigger: section, start: 'top 60%', end: 'top 25%', scrub: 1 },
           })
-        })
+        }
 
         buttons.forEach((btn) => {
           gsap.fromTo(btn, { opacity: 0, y: 15 }, {

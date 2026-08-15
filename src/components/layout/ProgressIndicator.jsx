@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useLang } from '../../lib/LangContext'
 
 export default function ProgressIndicator({ activeScene, scrollProgress }) {
@@ -9,15 +10,15 @@ export default function ProgressIndicator({ activeScene, scrollProgress }) {
   return (
     <div className="pointer-events-none fixed bottom-6 left-6 z-40 flex flex-col gap-2 md:bottom-8 md:left-8">
       <div className="flex items-baseline gap-2">
-        <span className="font-display text-2xl font-semibold text-white md:text-3xl">
+        <span className="micro-label font-display text-2xl text-white md:text-3xl">
           {String(current).padStart(2, '0')}
         </span>
-        <span className="text-sm font-light text-neutral-500">
+        <span className="micro-label text-sm text-neutral-500">
           / {String(total).padStart(2, '0')}
         </span>
       </div>
 
-      <span className="text-[10px] font-medium uppercase tracking-[0.25em] text-neutral-500">
+      <span className="micro-label text-[10px] uppercase text-neutral-500">
         {sceneLabel}
       </span>
 

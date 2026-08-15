@@ -6,30 +6,27 @@ export default function ScenePerformance() {
 
   return (
     <section data-scene="2" className="scene-section relative h-screen w-full">
-      <div className="flex h-full flex-col items-center justify-center px-6 md:px-12">
-        <span className="mb-4 block text-[10px] font-medium uppercase tracking-[0.3em] text-accent-soft">
+      <div className="flex h-full flex-col items-start justify-center px-6 md:px-12 lg:px-24">
+        <span data-reveal-item className="micro-label mb-4 block text-[10px] uppercase text-accent-soft">
           {c.chapter}
         </span>
-        <h2 className="font-display text-4xl font-semibold leading-[1.0] tracking-tight text-center text-white sm:text-5xl md:text-6xl lg:text-7xl">
+        <h2 data-reveal-item className="max-w-[10ch] font-display text-4xl font-semibold leading-[0.92] tracking-[-0.04em] text-white sm:text-5xl md:text-6xl lg:text-7xl">
           {c.headline}
         </h2>
-        <div className="mt-4 space-y-1 text-center md:mt-6">
+        <div data-reveal-item className="mt-4 max-w-sm space-y-1 md:mt-6">
           <p className="text-sm font-light text-neutral-400 md:text-base">{c.sub1}</p>
           <p className="text-sm font-light text-neutral-400 md:text-base">{c.sub2}</p>
         </div>
 
         {/* Power / Response / Precision */}
-        <div className="mt-12 flex flex-col items-center gap-8 md:mt-16 md:flex-row md:gap-12 lg:gap-20">
-          {c.words.map((w, i) => (
-            <div key={w.num} className="flex flex-col items-center text-center">
-              <span className="font-mono text-[10px] font-medium text-accent/50">{w.num}</span>
-              <span className="mt-2 font-display text-2xl font-semibold tracking-wide text-white/90 md:text-3xl lg:text-4xl">
+        <div className="mt-12 flex flex-col items-start gap-6 border-l border-accent/30 pl-5 rtl:border-l-0 rtl:border-r rtl:pl-0 rtl:pr-5 md:mt-16 md:gap-7">
+          {c.words.map((w) => (
+            <div key={w.num} className="moment-item flex flex-col items-start text-left rtl:text-right">
+              <span className="micro-label font-mono text-[10px] text-accent/50">{w.num}</span>
+              <span className="callout-title mt-1 font-display text-2xl md:text-3xl lg:text-4xl">
                 {w.word}
               </span>
-              <span className="mt-2 text-[11px] font-light text-neutral-500">{w.text}</span>
-              {i < c.words.length - 1 && (
-                <span className="mt-6 hidden h-12 w-px bg-graphite-600 md:block" />
-              )}
+              <span className="callout-description mt-1 max-w-xs text-[11px]">{w.text}</span>
             </div>
           ))}
         </div>

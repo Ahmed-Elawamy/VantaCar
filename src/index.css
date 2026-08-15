@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Noto+Kufi+Arabic:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -24,11 +24,11 @@ html, body {
 
 /* Arabic font override */
 [dir="rtl"] {
-  font-family: 'Noto Kufi Arabic', 'Inter', system-ui, sans-serif;
+  font-family: 'Noto Sans Arabic', 'Inter', system-ui, sans-serif;
 }
 
 [dir="rtl"] .font-display {
-  font-family: 'Noto Kufi Arabic', 'Sora', system-ui, sans-serif;
+  font-family: 'Noto Sans Arabic', 'Sora', system-ui, sans-serif;
 }
 
 /* Premium scrollbar */
@@ -99,10 +99,84 @@ html, body {
 
 .scene-section button {
   pointer-events: auto;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-shadow: 0 1px 10px rgba(10, 11, 13, 0.35);
 }
 
 /* Reveal animation classes */
 .reveal-text {
   opacity: 0;
   transform: translateY(30px);
+}
+
+/* Readable editorial text tokens */
+.scene-section p {
+  color: #d0d0cc;
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 12px rgba(10, 11, 13, 0.35);
+}
+
+.scene-section .callout-title {
+  color: #f1f1ed;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px 12px rgba(10, 11, 13, 0.4);
+}
+
+.scene-section .callout-description {
+  color: #b8b8b6;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: -0.005em;
+}
+
+.micro-label {
+  color: #a3a3a6;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.scene-section h1,
+.scene-section h2,
+.scene-section h3 {
+  text-shadow: 0 2px 18px rgba(10, 11, 13, 0.35);
+}
+
+footer .text-neutral-500 {
+  color: #b8b8b6;
+}
+
+footer .text-neutral-600 {
+  color: #8f8f92;
+}
+
+[dir="rtl"] .scene-section p,
+[dir="rtl"] .callout-description {
+  font-family: 'Noto Sans Arabic', 'Inter', system-ui, sans-serif;
+  letter-spacing: 0;
+  line-height: 1.9;
+}
+
+[dir="rtl"] .micro-label,
+[dir="rtl"] button {
+  letter-spacing: 0;
+}
+
+[dir="rtl"] button {
+  font-family: 'Noto Sans Arabic', 'Inter', system-ui, sans-serif;
+}
+
+@media (max-width: 640px) {
+  .scene-section p,
+  .scene-section .callout-description {
+    line-height: 1.8;
+  }
+
+  .scene-section .callout-description {
+    font-size: 0.76rem;
+  }
 }
